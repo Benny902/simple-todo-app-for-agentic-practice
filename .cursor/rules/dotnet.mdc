@@ -1,0 +1,31 @@
+---
+description: Standards for C# .NET Backend development including architecture, API design, and testing.
+globs: backend/**/*.cs
+alwaysApply: false
+---
+
+# .NET Backend Standards
+
+## Architecture
+- **Layering**: Follow strict separation: `Endpoints` -> `Services` -> `Data`.
+  - **Endpoints**: Handle HTTP request/response, validation, and mapping. Inject `ITaskService`.
+  - **Services**: Contain business logic and database interactions. Inject `AppDbContext`.
+  - **Data**: Contains `AppDbContext` and Db Models.
+- **Dependency Injection**: Always use constructor injection for services and loggers.
+
+## API Design
+- **Minimal APIs**: Use `MapGroup` and extension methods (e.g., `MapTaskEndpoints`) to organize endpoints.
+- **DTOs**: STRICTLY separate models:
+  - `Requests`: Models for input (e.g., `CreateTaskRequest`). Use `DataAnnotations` for validation.
+  - `Responses`: Models for output (e.g., `TaskResponse`).
+  - `Db`: Internal Entity Framework models.
+- **Validation**: Use `DataAnnotations` attributes (e.g., `[Required]`, `[MinLength]`) on Request DTOs.
+- **HTTP Verbs**: Use `PATCH` for partial updates (e.g., toggling completion).
+
+## Coding Style
+- **Namespaces**: Use file-scoped namespaces (e.g., `namespace SimpleTaskBackend.Services;`).
+- **Logging**: Inject `ILogger<T>` into all services and endpoints. Use structured logging.
+
+## Testing
+- **Integration Tests**: Use `WebApplicationFactory` for integration tests.
+- **State**: Reset database state between tests using `IAsyncLifetime`.

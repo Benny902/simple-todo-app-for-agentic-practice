@@ -1,0 +1,26 @@
+---
+description: Standards for React Frontend development including hooks, API integration, and styling.
+globs: frontend/**/*.tsx,frontend/**/*.ts
+alwaysApply: false
+---
+# React Frontend Standards
+
+## Architecture
+- **Separation of Concerns**: Split logic from UI.
+  - **Components**: Pure UI presentation.
+  - **Hooks**: Business logic and state management (e.g., `useTasks`).
+  - **Services**: API calls only (e.g., `api.ts`).
+- **Configuration**: Use `config.ts` for environment variables.
+
+## Coding Style
+- **TypeScript**: Use `import type` for type-only imports. Define strict interfaces.
+- **Components**: Functional components with clear props interfaces.
+- **Styling**: Use global CSS (BEM naming) or standard CSS modules. No inline styles.
+
+## Data Fetching
+- **API Service**: Centralize all `fetch` calls in `services/api.ts`.
+- **Async/Await**: Use `async/await` with `try/catch` blocks for error handling.
+- **Logging**: Use the custom `logger` utility, not `console.log` directly.
+
+## Testing
+- **Cypress**: Use Cypress for E2E testing key user flows.
