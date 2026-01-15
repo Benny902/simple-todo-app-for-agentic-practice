@@ -1,6 +1,6 @@
-# SimpTask Workshop Exercises
+# Simple Task Manager Workshop Exercises
 
-This repository contains a simple "SimpTask" application (React Frontend + .NET Backend) designed as a base for practicing agentic coding tools.
+This repository contains a simple "Simple Task Manager" application (React Frontend + .NET Backend) designed as a base for practicing agentic coding tools.
 
 ## Frontend Tasks
 

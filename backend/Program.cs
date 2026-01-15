@@ -10,7 +10,7 @@ builder.Services.AddCors();
 
 // Add In-Memory Database
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseInMemoryDatabase("SimpTaskDb"));
+    options.UseInMemoryDatabase("SimpleTaskDb"));
 
 var app = builder.Build();
 

@@ -1,4 +1,4 @@
-# Quickstart: SimpTask
+# Quickstart: Simple Task Manager
 
 ## Prerequisites
 - .NET 10 SDK

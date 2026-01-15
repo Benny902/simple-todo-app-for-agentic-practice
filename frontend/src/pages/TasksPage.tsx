@@ -50,7 +50,7 @@ export const TasksPage = () => {
     return (
         <div className="tasks-page">
             <header className="page-header">
-                <h1>SimpTask</h1>
+                <h1>Simple Task Manager</h1>
                 <p>Simple task management for your day.</p>
             </header>
             

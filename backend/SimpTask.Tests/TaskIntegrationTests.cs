@@ -31,7 +31,7 @@ public class TaskIntegrationTests : IClassFixture<WebApplicationFactory<Program>
         // Note: In-memory DB is shared across tests if we don't reset it. 
         // For simplicity in this workshop setup, we might see data from other tests or previous runs if the app keeps running.
         // But WebApplicationFactory usually creates a fresh host per test run (though sharing context depends on config).
-        // Since we registered DbContext with just UseInMemoryDatabase("SimpTaskDb"), it stays alive for the process lifetime.
+        // Since we registered DbContext with just UseInMemoryDatabase("SimpleTaskDb"), it stays alive for the process lifetime.
         // A better approach for tests would be to use a unique name per test or ensure clean state.
         // For this simple test, we just check it returns a list.
     }

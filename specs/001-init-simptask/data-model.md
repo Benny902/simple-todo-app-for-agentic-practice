@@ -1,4 +1,4 @@
-# Data Model: Init SimpTask
+# Data Model: Init Simple Task Manager
 
 **Branch**: `001-init-simptask`
 

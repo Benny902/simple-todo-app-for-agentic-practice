@@ -1,8 +1,8 @@
 ---
-description: "Task list for SimpTask implementation"
+description: "Task list for Simple Task Manager implementation"
 ---
 
-# Tasks: Init SimpTask
+# Tasks: Init Simple Task Manager
 
 **Input**: Design documents from `/specs/001-init-simptask/`
 **Prerequisites**: plan.md, spec.md, data-model.md, contracts/openapi.yaml, research.md, quickstart.md
@@ -87,8 +87,8 @@ description: "Task list for SimpTask implementation"
 
 **Purpose**: Adding test coverage as requested (Integration & E2E)
 
-- [X] T026 Create Test Project: `dotnet new xunit -n SimpTask.Tests`
-- [X] T027 Configure Integration Tests: Setup `WebApplicationFactory` in `backend/SimpTask.Tests/`
+- [X] T026 Create Test Project: `dotnet new xunit -n Simple Task Manager.Tests`
+- [X] T027 Configure Integration Tests: Setup `WebApplicationFactory` in `backend/Simple Task Manager.Tests/`
 - [X] T028 [US1] Backend Test: Write integration test for GET/POST tasks
 - [X] T029 [US2] Backend Test: Write integration test for PATCH task
 - [X] T031 Setup Cypress: `npm install cypress --save-dev` in `frontend/`

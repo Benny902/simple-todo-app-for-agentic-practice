@@ -1,4 +1,4 @@
-describe('SimpTask E2E', () => {
+describe('Simple Task Manager E2E', () => {
   beforeEach(() => {
     // Visit the app
     cy.visit('http://localhost:5173')

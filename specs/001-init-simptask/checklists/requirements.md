@@ -1,4 +1,4 @@
-# Specification Quality Checklist: Init SimpTask
+# Specification Quality Checklist: Init Simple Task Manager
 
 **Purpose**: Validate specification completeness and quality before proceeding to planning
 **Created**: 2026-01-15

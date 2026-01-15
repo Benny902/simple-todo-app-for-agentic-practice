@@ -1,4 +1,4 @@
-# Implementation Plan: Init SimpTask
+# Implementation Plan: Init Simple Task Manager
 
 **Branch**: `001-init-simptask` | **Date**: 2026-01-15 | **Spec**: [Link to spec](../spec.md)
 **Input**: Feature specification from `/specs/001-init-simptask/spec.md`
@@ -7,7 +7,7 @@
 
 ## Summary
 
-Implement a minimalist To-Do list application "SimpTask" with a React Frontend and .NET WebAPI Backend. The app will support creating, viewing, and completing tasks. **Deletion is intentionally omitted** to serve as a learning exercise for workshop participants. The backend will use an In-Memory database, and the frontend will use standard `fetch` and `useEffect`.
+Implement a minimalist To-Do list application "Simple Task Manager" with a React Frontend and .NET WebAPI Backend. The app will support creating, viewing, and completing tasks. **Deletion is intentionally omitted** to serve as a learning exercise for workshop participants. The backend will use an In-Memory database, and the frontend will use standard `fetch` and `useEffect`.
 
 ## Technical Context
 
@@ -80,7 +80,7 @@ backend/
 ├── Services/          # TaskService (Business logic)
 ├── Endpoints/         # TaskEndpoints (API handlers)
 ├── Program.cs
-└── SimpTask.Tests/    # Separate xUnit project (Integration Tests)
+└── Simple Task Manager.Tests/    # Separate xUnit project (Integration Tests)
 
 frontend/
 ├── src/

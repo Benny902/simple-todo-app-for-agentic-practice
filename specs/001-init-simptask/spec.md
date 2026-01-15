@@ -1,9 +1,9 @@
-# Feature Specification: Init SimpTask
+# Feature Specification: Init Simple Task Manager
 
 **Feature Branch**: `001-init-simptask`  
 **Created**: 2026-01-15  
 **Status**: Draft  
-**Input**: User description: "Create a simple To-Do list application called SimpTask. Users can add tasks with a title, view all tasks, mark tasks as done, and delete tasks. This app serves as a clean, minimalist base for a technical learning session."
+**Input**: User description: "Create a simple To-Do list application called Simple Task Manager. Users can add tasks with a title, view all tasks, mark tasks as done, and delete tasks. This app serves as a clean, minimalist base for a technical learning session."
 
 ## User Scenarios & Testing *(mandatory)*
 
