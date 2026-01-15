@@ -1,10 +1,8 @@
 using System.Net.Http.Json;
-using backend.Models;
 using Microsoft.AspNetCore.Mvc.Testing;
-using Xunit;
 using Task = System.Threading.Tasks.Task;
 
-namespace SimpTask.Tests;
+namespace SimpleTaskBackend.Tests;
 
 public class TaskIntegrationTests : IClassFixture<WebApplicationFactory<Program>>
 {
@@ -26,7 +24,7 @@ public class TaskIntegrationTests : IClassFixture<WebApplicationFactory<Program>
 
         // Assert
         response.EnsureSuccessStatusCode();
-        var tasks = await response.Content.ReadFromJsonAsync<List<backend.Models.Task>>();
+        var tasks = await response.Content.ReadFromJsonAsync<List<Models.Task>>();
         Assert.NotNull(tasks);
         // Note: In-memory DB is shared across tests if we don't reset it. 
         // For simplicity in this workshop setup, we might see data from other tests or previous runs if the app keeps running.
@@ -48,7 +46,7 @@ public class TaskIntegrationTests : IClassFixture<WebApplicationFactory<Program>
 
         // Assert
         response.EnsureSuccessStatusCode(); // Status Code 201-299
-        var createdTask = await response.Content.ReadFromJsonAsync<backend.Models.Task>();
+        var createdTask = await response.Content.ReadFromJsonAsync<Models.Task>();
         Assert.NotNull(createdTask);
         Assert.Equal(newTask.title, createdTask.Title);
         Assert.False(createdTask.IsCompleted);
@@ -63,7 +61,7 @@ public class TaskIntegrationTests : IClassFixture<WebApplicationFactory<Program>
         // Create a task first
         var createResponse = await client.PostAsJsonAsync("/api/tasks", new { title = "Task to Complete" });
         createResponse.EnsureSuccessStatusCode();
-        var createdTask = await createResponse.Content.ReadFromJsonAsync<backend.Models.Task>();
+        var createdTask = await createResponse.Content.ReadFromJsonAsync<Models.Task>();
         Assert.NotNull(createdTask);
 
         // Act
@@ -71,7 +69,7 @@ public class TaskIntegrationTests : IClassFixture<WebApplicationFactory<Program>
 
         // Assert
         patchResponse.EnsureSuccessStatusCode();
-        var updatedTask = await patchResponse.Content.ReadFromJsonAsync<backend.Models.Task>();
+        var updatedTask = await patchResponse.Content.ReadFromJsonAsync<Models.Task>();
         Assert.NotNull(updatedTask);
         Assert.True(updatedTask.IsCompleted);
         Assert.Equal(createdTask.Id, updatedTask.Id);

@@ -1,4 +1,0 @@
-<Solution>
-  <Project Path="simple-backend.csproj" />
-  <Project Path="SimpTask.Tests/SimpTask.Tests.csproj" />
-</Solution>

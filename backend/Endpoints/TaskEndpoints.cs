@@ -1,8 +1,8 @@
-using backend.Data;
-using backend.Models;
 using Microsoft.EntityFrameworkCore;
+using SimpleTaskBackend.Data;
+using Task = SimpleTaskBackend.Models.Task;
 
-namespace backend.Endpoints;
+namespace SimpleTaskBackend.Endpoints;
 
 public record UpdateTaskRequest(string? Title, bool? IsCompleted);
 
@@ -18,7 +18,7 @@ public static class TaskEndpoints
         })
         .WithName("GetTasks");
 
-        group.MapPost("/", async (backend.Models.Task task, AppDbContext db) =>
+        group.MapPost("/", async (Task task, AppDbContext db) =>
         {
             if (string.IsNullOrWhiteSpace(task.Title))
             {

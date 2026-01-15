@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
-using Task = backend.Models.Task;
+using Task = SimpleTaskBackend.Models.Task;
 
-namespace backend.Data;
+namespace SimpleTaskBackend.Data;
 
 public class AppDbContext : DbContext
 {

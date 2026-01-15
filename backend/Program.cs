@@ -1,6 +1,6 @@
-using backend.Data;
-using backend.Endpoints;
 using Microsoft.EntityFrameworkCore;
+using SimpleTaskBackend.Data;
+using SimpleTaskBackend.Endpoints;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -33,4 +33,7 @@ app.MapTaskEndpoints();
 
 app.Run();
 
-public partial class Program { }
+namespace SimpleTaskBackend
+{
+    public partial class Program { }
+}
