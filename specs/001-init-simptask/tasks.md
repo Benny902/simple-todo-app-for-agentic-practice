@@ -74,10 +74,10 @@ description: "Task list for SimpTask implementation"
 
 ### Implementation for User Story 2
 
-- [ ] T018 [US2] Backend Endpoint: Implement `PATCH /api/tasks/{id}` in `backend/Endpoints/TaskEndpoints.cs`
-- [ ] T019 [P] [US2] Frontend Service: Add `updateTask` to `frontend/src/services/api.ts`
-- [ ] T020 [US2] Frontend Component: Update `frontend/src/components/TaskItem.tsx` to include checkbox/toggle
-- [ ] T021 [US2] Frontend Integration: Add toggle handler in `frontend/src/App.tsx`
+- [X] T018 [US2] Backend Endpoint: Implement `PATCH /api/tasks/{id}` in `backend/Endpoints/TaskEndpoints.cs`
+- [X] T019 [P] [US2] Frontend Service: Add `updateTask` to `frontend/src/services/api.ts`
+- [X] T020 [US2] Frontend Component: Update `frontend/src/components/TaskItem.tsx` to include checkbox/toggle
+- [X] T021 [US2] Frontend Integration: Add toggle handler in `frontend/src/App.tsx` (Refactored to TasksPage.tsx)
 
 **Checkpoint**: At this point, User Stories 1 AND 2 should both work independently
 

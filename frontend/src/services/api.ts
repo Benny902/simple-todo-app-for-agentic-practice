@@ -25,5 +25,19 @@ export const api = {
             throw new Error('Failed to create task');
         }
         return response.json();
+    },
+
+    updateTask: async (id: string, updates: Partial<Task>): Promise<Task> => {
+        const response = await fetch(`${API_BASE_URL}/api/tasks/${id}`, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(updates),
+        });
+        if (!response.ok) {
+            throw new Error('Failed to update task');
+        }
+        return response.json();
     }
 };

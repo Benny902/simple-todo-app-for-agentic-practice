@@ -37,6 +37,16 @@ export const TasksPage = () => {
         }
     };
 
+    const handleToggleTask = async (id: string, isCompleted: boolean) => {
+        try {
+            const updatedTask = await api.updateTask(id, { isCompleted });
+            setTasks(tasks.map(t => t.id === id ? updatedTask : t));
+        } catch (err) {
+            console.error(err);
+            alert('Failed to update task');
+        }
+    };
+
     return (
         <div className="tasks-page">
             <header className="page-header">
@@ -53,7 +63,7 @@ export const TasksPage = () => {
                 {loading ? (
                     <div className="loading-state">Loading tasks...</div>
                 ) : (
-                    <TaskList tasks={tasks} />
+                    <TaskList tasks={tasks} onToggleTask={handleToggleTask} />
                 )}
             </section>
         </div>
