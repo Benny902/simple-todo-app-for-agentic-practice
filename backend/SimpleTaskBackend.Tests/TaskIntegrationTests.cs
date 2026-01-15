@@ -1,11 +1,13 @@
 using System.Net.Http.Json;
 using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.Extensions.DependencyInjection;
+using SimpleTaskBackend.Data;
 using SimpleTaskBackend.Models.Responses;
 using Task = System.Threading.Tasks.Task;
 
 namespace SimpleTaskBackend.Tests;
 
-public class TaskIntegrationTests : IClassFixture<WebApplicationFactory<Program>>
+public class TaskIntegrationTests : IClassFixture<WebApplicationFactory<Program>>, IAsyncLifetime
 {
     private readonly WebApplicationFactory<Program> _factory;
 
@@ -13,6 +15,19 @@ public class TaskIntegrationTests : IClassFixture<WebApplicationFactory<Program>
     {
         _factory = factory;
     }
+
+    public async Task InitializeAsync()
+    {
+        // Reset the database state before every test.
+        // This is necessary because IClassFixture shares the WebApplicationFactory (and thus the In-Memory DB) 
+        // across all tests in this class for performance.
+        using var scope = _factory.Services.CreateScope();
+        var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+        await db.Database.EnsureDeletedAsync();
+        await db.Database.EnsureCreatedAsync();
+    }
+
+    public Task DisposeAsync() => Task.CompletedTask;
 
     [Fact]
     public async Task GetTasks_ReturnsOkAndEmptyList_WhenNoTasksExist()
@@ -27,6 +42,7 @@ public class TaskIntegrationTests : IClassFixture<WebApplicationFactory<Program>
         response.EnsureSuccessStatusCode();
         var tasks = await response.Content.ReadFromJsonAsync<List<TaskResponse>>();
         Assert.NotNull(tasks);
+        Assert.Empty(tasks);
     }
 
     [Fact]
