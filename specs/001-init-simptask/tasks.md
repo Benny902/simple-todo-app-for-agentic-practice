@@ -54,13 +54,13 @@ description: "Task list for SimpTask implementation"
 
 ### Implementation for User Story 1
 
-- [ ] T011 [US1] Backend Endpoint: Implement `GET /api/tasks` in `backend/Endpoints/TaskEndpoints.cs`
-- [ ] T012 [US1] Backend Endpoint: Implement `POST /api/tasks` in `backend/Endpoints/TaskEndpoints.cs`
-- [ ] T013 [P] [US1] Frontend Service: Add `getTasks` and `createTask` to `frontend/src/services/api.ts`
-- [ ] T014 [US1] Frontend Component: Create `frontend/src/components/TaskInput.tsx`
-- [ ] T015 [US1] Frontend Component: Create `frontend/src/components/TaskList.tsx` (Read-only view initially)
-- [ ] T016 [US1] Frontend Integration: Wire up state and effects in `frontend/src/App.tsx`
-- [ ] T017 [US1] Enable CORS in `backend/Program.cs` to allow frontend requests
+- [X] T011 [US1] Backend Endpoint: Implement `GET /api/tasks` in `backend/Endpoints/TaskEndpoints.cs`
+- [X] T012 [US1] Backend Endpoint: Implement `POST /api/tasks` in `backend/Endpoints/TaskEndpoints.cs`
+- [X] T013 [P] [US1] Frontend Service: Add `getTasks` and `createTask` to `frontend/src/services/api.ts`
+- [X] T014 [US1] Frontend Component: Create `frontend/src/components/TaskInput.tsx`
+- [X] T015 [US1] Frontend Component: Create `frontend/src/components/TaskList.tsx` (Read-only view initially)
+- [X] T016 [US1] Frontend Integration: Wire up state and effects in `frontend/src/pages/TasksPage.tsx` (Refactored from App.tsx)
+- [X] T017 [US1] Enable CORS in `backend/Program.cs` to allow frontend requests
 
 **Checkpoint**: At this point, User Story 1 should be fully functional and testable independently
 

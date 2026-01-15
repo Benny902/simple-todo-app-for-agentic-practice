@@ -1,7 +1,9 @@
+import { TasksPage } from './pages/TasksPage';
+
 function App() {
   return (
-    <div>
-      <h1>SimpTask</h1>
+    <div className="app">
+      <TasksPage />
     </div>
   )
 }
