@@ -6,7 +6,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddOpenApi();
-builder.Services.AddCors(); // Add this line
+builder.Services.AddCors();
 
 // Add In-Memory Database
 builder.Services.AddDbContext<AppDbContext>(options =>
@@ -32,3 +32,5 @@ app.UseCors(policy => policy
 app.MapTaskEndpoints();
 
 app.Run();
+
+public partial class Program { }

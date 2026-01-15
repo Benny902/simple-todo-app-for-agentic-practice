@@ -7,7 +7,7 @@
 
 ## Summary
 
-Implement a minimalist To-Do list application "SimpTask" with a React Frontend and .NET WebAPI Backend. The app will support creating, viewing, completing, and deleting tasks. The backend will use an In-Memory database for simplicity (per requirements), and the frontend will use standard `fetch` and `useEffect` initially to serve as a baseline for future refactoring tasks.
+Implement a minimalist To-Do list application "SimpTask" with a React Frontend and .NET WebAPI Backend. The app will support creating, viewing, and completing tasks. **Deletion is intentionally omitted** to serve as a learning exercise for workshop participants. The backend will use an In-Memory database, and the frontend will use standard `fetch` and `useEffect`.
 
 ## Technical Context
 
@@ -44,7 +44,7 @@ Implement a minimalist To-Do list application "SimpTask" with a React Frontend a
 
 **Scale/Scope**: 
 - Single user, <100 tasks typical load.
-- ~5 API endpoints.
+- ~4 API endpoints (GET, POST, PATCH).
 - ~2 Main UI components (TaskForm, TaskList).
 
 ## Constitution Check

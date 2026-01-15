@@ -68,20 +68,6 @@ paths:
                 $ref: '#/components/schemas/Task'
         '404':
           description: Task not found
-    delete:
-      summary: Delete a task
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: string
-            format: uuid
-      responses:
-        '204':
-          description: Deleted successfully
-        '404':
-          description: Task not found
 
 components:
   schemas:

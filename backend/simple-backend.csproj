@@ -5,6 +5,7 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <RootNamespace>simple_backend</RootNamespace>
+    <DefaultItemExcludes>$(DefaultItemExcludes);SimpTask.Tests\**</DefaultItemExcludes>
   </PropertyGroup>
 
   <ItemGroup>

@@ -83,39 +83,21 @@ description: "Task list for SimpTask implementation"
 
 ---
 
-## Phase 5: User Story 3 - Delete Task (Priority: P3)
-
-**Goal**: Users can remove tasks.
-
-**Independent Test**: Click delete button, verify task removal.
-
-### Implementation for User Story 3
-
-- [ ] T022 [US3] Backend Endpoint: Implement `DELETE /api/tasks/{id}` in `backend/Endpoints/TaskEndpoints.cs`
-- [ ] T023 [P] [US3] Frontend Service: Add `deleteTask` to `frontend/src/services/api.ts`
-- [ ] T024 [US3] Frontend Component: Add Delete button to `frontend/src/components/TaskItem.tsx`
-- [ ] T025 [US3] Frontend Integration: Add delete handler in `frontend/src/App.tsx`
-
-**Checkpoint**: All user stories should now be independently functional
-
----
-
-## Phase 6: Tests (Low Priority / Final Phase)
+## Phase 5: Tests (Low Priority / Final Phase)
 
 **Purpose**: Adding test coverage as requested (Integration & E2E)
 
-- [ ] T026 Create Test Project: `dotnet new xunit -n SimpTask.Tests`
-- [ ] T027 Configure Integration Tests: Setup `WebApplicationFactory` in `backend/SimpTask.Tests/`
-- [ ] T028 [US1] Backend Test: Write integration test for GET/POST tasks
-- [ ] T029 [US2] Backend Test: Write integration test for PATCH task
-- [ ] T030 [US3] Backend Test: Write integration test for DELETE task
-- [ ] T031 Setup Cypress: `npm install cypress --save-dev` in `frontend/`
-- [ ] T032 [US1] E2E Test: Write Cypress spec for adding/viewing tasks
-- [ ] T033 [US2] [US3] E2E Test: Write Cypress spec for completing and deleting tasks
+- [X] T026 Create Test Project: `dotnet new xunit -n SimpTask.Tests`
+- [X] T027 Configure Integration Tests: Setup `WebApplicationFactory` in `backend/SimpTask.Tests/`
+- [X] T028 [US1] Backend Test: Write integration test for GET/POST tasks
+- [X] T029 [US2] Backend Test: Write integration test for PATCH task
+- [X] T031 Setup Cypress: `npm install cypress --save-dev` in `frontend/`
+- [X] T032 [US1] E2E Test: Write Cypress spec for adding/viewing tasks
+- [X] T033 [US2] E2E Test: Write Cypress spec for completing tasks
 
 ---
 
-## Phase 7: Polish & Cross-Cutting Concerns
+## Phase 6: Polish & Cross-Cutting Concerns
 
 **Purpose**: Improvements that affect multiple user stories
 
@@ -132,13 +114,12 @@ description: "Task list for SimpTask implementation"
 - **Setup (Phase 1)**: No dependencies - can start immediately
 - **Foundational (Phase 2)**: Depends on Setup completion - BLOCKS all user stories
 - **User Stories (Phase 3+)**: All depend on Foundational phase completion
-- **Tests (Phase 6)**: Can happen anytime after respective stories, but prioritized last per user request
+- **Tests (Phase 5)**: Can happen anytime after respective stories, but prioritized last per user request
 
 ### User Story Dependencies
 
 - **User Story 1 (P1)**: Can start after Foundational
 - **User Story 2 (P2)**: Independent logic, but UI depends on List component from US1
-- **User Story 3 (P3)**: Independent logic, but UI depends on List component from US1
 
 ### Parallel Opportunities
 
@@ -163,4 +144,3 @@ description: "Task list for SimpTask implementation"
 1. Complete Setup + Foundational → Foundation ready
 2. Add User Story 1 → Test independently → MVP!
 3. Add User Story 2 → Test independently
-4. Add User Story 3 → Test independently

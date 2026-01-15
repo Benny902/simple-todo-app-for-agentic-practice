@@ -79,12 +79,6 @@ Update specific properties of a task.
 - **Response**: `200 OK` (returns updated task).
 - **Behavior**: Updates only provided fields. `Id` and `CreatedAt` are immutable.
 
-#### 4. DELETE /api/tasks/{id}
-Delete a task.
-
-- **Response**: `204 No Content`
-- **Error**: `404 Not Found` if id doesn't exist (optional, idempotent delete is also fine).
-
 ## Database Schema (In-Memory)
 
 Table: `Tasks`
