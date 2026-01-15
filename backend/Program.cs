@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using SimpleTaskBackend.Data;
 using SimpleTaskBackend.Endpoints;
+using SimpleTaskBackend.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,6 +12,9 @@ builder.Services.AddCors();
 // Add In-Memory Database
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseInMemoryDatabase("SimpleTaskDb"));
+
+// Register Services
+builder.Services.AddScoped<ITaskService, TaskService>();
 
 var app = builder.Build();
 

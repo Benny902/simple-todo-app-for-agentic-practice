@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace SimpleTaskBackend.Models;
+namespace SimpleTaskBackend.Models.Db;
 
 public class Task
 {

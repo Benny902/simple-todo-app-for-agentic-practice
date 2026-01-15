@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using Task = SimpleTaskBackend.Models.Task;
+using Task = SimpleTaskBackend.Models.Db.Task;
 
 namespace SimpleTaskBackend.Data;
 

@@ -1,10 +1,11 @@
-using Microsoft.EntityFrameworkCore;
-using SimpleTaskBackend.Data;
-using Task = SimpleTaskBackend.Models.Task;
+using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Mvc;
+using SimpleTaskBackend.Models.Requests;
+using SimpleTaskBackend.Models.Responses;
+using SimpleTaskBackend.Services;
+using DbTask = SimpleTaskBackend.Models.Db.Task;
 
 namespace SimpleTaskBackend.Endpoints;
-
-public record UpdateTaskRequest(string? Title, bool? IsCompleted);
 
 public static class TaskEndpoints
 {
@@ -12,45 +13,84 @@ public static class TaskEndpoints
     {
         var group = routes.MapGroup("/api/tasks");
 
-        group.MapGet("/", async (AppDbContext db) =>
+        group.MapGet("/", async (ITaskService service, ILogger<Program> logger) =>
         {
-            return await db.Tasks.ToListAsync();
+            try
+            {
+                var tasks = await service.GetAllAsync();
+                var response = tasks.Select(MapToResponse).ToList();
+                return Results.Ok(response);
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, "Error getting tasks");
+                return Results.InternalServerError();
+            }
         })
         .WithName("GetTasks");
 
-        group.MapPost("/", async (Task task, AppDbContext db) =>
+        group.MapPost("/", async ([FromBody] CreateTaskRequest request, ITaskService service, ILogger<Program> logger) =>
         {
-            if (string.IsNullOrWhiteSpace(task.Title))
+            try
             {
-                return Results.BadRequest("Title is required");
-            }
+                if (!Validator.TryValidateObject(request, new ValidationContext(request), null, true))
+                {
+                    return Results.BadRequest("Invalid request");
+                }
 
-            db.Tasks.Add(task);
-            await db.SaveChangesAsync();
-            return Results.Created($"/api/tasks/{task.Id}", task);
+                var newTask = new DbTask
+                {
+                    Title = request.Title
+                };
+
+                var createdTask = await service.CreateAsync(newTask);
+                var response = MapToResponse(createdTask);
+
+                return Results.Created($"/api/tasks/{createdTask.Id}", response);
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, "Error creating task");
+                return Results.InternalServerError();
+            }
         })
         .WithName("CreateTask");
 
-        group.MapPatch("/{id:guid}", async (Guid id, UpdateTaskRequest request, AppDbContext db) =>
+        group.MapPatch("/{id:guid}", async (Guid id, [FromBody] UpdateTaskRequest request, ITaskService service, ILogger<Program> logger) =>
         {
-            var task = await db.Tasks.FindAsync(id);
-
-            if (task is null) return Results.NotFound();
-
-            if (request.IsCompleted.HasValue)
+            try
             {
-                task.IsCompleted = request.IsCompleted.Value;
+                 if (!Validator.TryValidateObject(request, new ValidationContext(request), null, true))
+                {
+                    return Results.BadRequest("Invalid request");
+                }
+
+                var updatedTask = await service.UpdateAsync(id, request.Title, request.IsCompleted);
+
+                if (updatedTask is null)
+                {
+                    return Results.NotFound();
+                }
+
+                return Results.Ok(MapToResponse(updatedTask));
             }
-            
-            if (!string.IsNullOrWhiteSpace(request.Title))
+            catch (Exception ex)
             {
-                task.Title = request.Title;
+                logger.LogError(ex, "Error updating task");
+                return Results.InternalServerError();
             }
-
-            await db.SaveChangesAsync();
-
-            return Results.Ok(task);
         })
         .WithName("UpdateTask");
+    }
+
+    private static TaskResponse MapToResponse(DbTask task)
+    {
+        return new TaskResponse
+        {
+            Id = task.Id,
+            Title = task.Title,
+            IsCompleted = task.IsCompleted,
+            CreatedAt = task.CreatedAt
+        };
     }
 }
