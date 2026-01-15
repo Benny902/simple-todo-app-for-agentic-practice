@@ -22,11 +22,11 @@ description: "Task list for SimpTask implementation"
 
 **Purpose**: Project initialization and basic structure
 
-- [ ] T001 Adjust solution structure: Add existing `backend` project to solution (if not already added)
-- [ ] T002 Clean Backend Template: Remove WeatherForecast sample code from `backend/`
-- [ ] T003 Clean Frontend Template: Remove default Vite assets and example code from `frontend/src/`
-- [ ] T004 [P] Add necessary NuGet packages to Backend: `Microsoft.EntityFrameworkCore.InMemory`
-- [ ] T005 [P] Setup Frontend structure: Create directories `frontend/src/components`, `frontend/src/types`, `frontend/src/services`
+- [X] T001 Adjust solution structure: Add existing `backend` project to solution (if not already added)
+- [X] T002 Clean Backend Template: Remove WeatherForecast sample code from `backend/`
+- [X] T003 Clean Frontend Template: Remove default Vite assets and example code from `frontend/src/`
+- [X] T004 [P] Add necessary NuGet packages to Backend: `Microsoft.EntityFrameworkCore.InMemory`
+- [X] T005 [P] Setup Frontend structure: Create directories `frontend/src/components`, `frontend/src/types`, `frontend/src/services`
 
 ---
 
@@ -36,11 +36,11 @@ description: "Task list for SimpTask implementation"
 
 **⚠️ CRITICAL**: No user story work can begin until this phase is complete
 
-- [ ] T006 Define Task Entity: Create `backend/Models/Task.cs`
-- [ ] T007 Setup DbContext: Create `backend/Data/AppDbContext.cs` with `DbSet<Task>`
-- [ ] T008 Configure Services: Register In-Memory DbContext in `backend/Program.cs`
-- [ ] T009 Define Frontend Types: Create `frontend/src/types/index.ts` with `Task` interface
-- [ ] T010 Setup API Client: Create `frontend/src/services/api.ts` with base fetch configuration
+- [X] T006 Define Task Entity: Create `backend/Models/Task.cs`
+- [X] T007 Setup DbContext: Create `backend/Data/AppDbContext.cs` with `DbSet<Task>`
+- [X] T008 Configure Services: Register In-Memory DbContext in `backend/Program.cs`
+- [X] T009 Define Frontend Types: Create `frontend/src/types/index.ts` with `Task` interface
+- [X] T010 Setup API Client: Create `frontend/src/services/api.ts` with base fetch configuration
 
 **Checkpoint**: Foundation ready - user story implementation can now begin in parallel
 
