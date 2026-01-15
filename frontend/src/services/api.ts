@@ -1,12 +1,11 @@
-const API_BASE_URL = 'http://localhost:5292';
-
+import { config } from '../config';
 import type { Task } from '../types';
 
 export const api = {
-    baseUrl: API_BASE_URL,
+    baseUrl: config.API_URL,
 
     getTasks: async (): Promise<Task[]> => {
-        const response = await fetch(`${API_BASE_URL}/api/tasks`);
+        const response = await fetch(`${config.API_URL}/api/tasks`);
         if (!response.ok) {
             throw new Error('Failed to fetch tasks');
         }
@@ -14,7 +13,7 @@ export const api = {
     },
 
     createTask: async (title: string): Promise<Task> => {
-        const response = await fetch(`${API_BASE_URL}/api/tasks`, {
+        const response = await fetch(`${config.API_URL}/api/tasks`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -28,7 +27,7 @@ export const api = {
     },
 
     updateTask: async (id: string, updates: Partial<Task>): Promise<Task> => {
-        const response = await fetch(`${API_BASE_URL}/api/tasks/${id}`, {
+        const response = await fetch(`${config.API_URL}/api/tasks/${id}`, {
             method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json',

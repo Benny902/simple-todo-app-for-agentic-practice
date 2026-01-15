@@ -1,0 +1,15 @@
+export const logger = {
+    info: (message: string, ...args: any[]) => {
+        if (import.meta.env.DEV) {
+            console.log(`[INFO] ${message}`, ...args);
+        }
+    },
+    error: (message: string, ...args: any[]) => {
+        console.error(`[ERROR] ${message}`, ...args);
+    },
+    warn: (message: string, ...args: any[]) => {
+        if (import.meta.env.DEV) {
+            console.warn(`[WARN] ${message}`, ...args);
+        }
+    }
+};

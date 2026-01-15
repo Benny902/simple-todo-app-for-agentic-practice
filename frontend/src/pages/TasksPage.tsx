@@ -1,51 +1,15 @@
-import { useEffect, useState } from 'react';
-import { api } from '../services/api';
-import type { Task } from '../types';
 import { TaskList } from '../components/TaskList';
 import { TaskInput } from '../components/TaskInput';
+import { useTasks } from '../hooks/useTasks';
 
 export const TasksPage = () => {
-    const [tasks, setTasks] = useState<Task[]>([]);
-    const [error, setError] = useState<string | null>(null);
-    const [loading, setLoading] = useState(true);
-
-    useEffect(() => {
-        loadTasks();
-    }, []);
-
-    const loadTasks = async () => {
-        try {
-            setLoading(true);
-            const data = await api.getTasks();
-            setTasks(data);
-            setError(null);
-        } catch (err) {
-            setError('Failed to load tasks');
-            console.error(err);
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    const handleAddTask = async (title: string) => {
-        try {
-            const newTask = await api.createTask(title);
-            setTasks([...tasks, newTask]);
-        } catch (err) {
-            console.error(err);
-            alert('Failed to add task');
-        }
-    };
-
-    const handleToggleTask = async (id: string, isCompleted: boolean) => {
-        try {
-            const updatedTask = await api.updateTask(id, { isCompleted });
-            setTasks(tasks.map(t => t.id === id ? updatedTask : t));
-        } catch (err) {
-            console.error(err);
-            alert('Failed to update task');
-        }
-    };
+    const { 
+        tasks, 
+        loading, 
+        error, 
+        handleAddTask, 
+        handleToggleTask 
+    } = useTasks();
 
     return (
         <div className="tasks-page">
