@@ -24,13 +24,13 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
 }
 
-app.UseHttpsRedirection();
-
 // Enable CORS
 app.UseCors(policy => policy
     .AllowAnyOrigin()
     .AllowAnyMethod()
     .AllowAnyHeader());
+
+app.UseHttpsRedirection();
 
 // Register Endpoints
 app.MapTaskEndpoints();
