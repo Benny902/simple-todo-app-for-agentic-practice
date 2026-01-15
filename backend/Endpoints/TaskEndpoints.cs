@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc;
+using SimpleTaskBackend.Filters;
 using SimpleTaskBackend.Models.Requests;
 using SimpleTaskBackend.Models.Responses;
 using SimpleTaskBackend.Services;
@@ -33,11 +34,6 @@ public static class TaskEndpoints
         {
             try
             {
-                if (!Validator.TryValidateObject(request, new ValidationContext(request), null, true))
-                {
-                    return Results.BadRequest("Invalid request");
-                }
-
                 var newTask = new DbTask
                 {
                     Title = request.Title
@@ -54,17 +50,13 @@ public static class TaskEndpoints
                 return Results.InternalServerError();
             }
         })
-        .WithName("CreateTask");
+        .WithName("CreateTask")
+        .AddEndpointFilter<ValidationFilter<CreateTaskRequest>>();
 
         group.MapPatch("/{id:guid}", async (Guid id, [FromBody] UpdateTaskRequest request, ITaskService service, ILogger<Program> logger) =>
         {
             try
             {
-                 if (!Validator.TryValidateObject(request, new ValidationContext(request), null, true))
-                {
-                    return Results.BadRequest("Invalid request");
-                }
-
                 var updatedTask = await service.UpdateAsync(id, request.Title, request.IsCompleted);
 
                 if (updatedTask is null)
@@ -80,7 +72,8 @@ public static class TaskEndpoints
                 return Results.InternalServerError();
             }
         })
-        .WithName("UpdateTask");
+        .WithName("UpdateTask")
+        .AddEndpointFilter<ValidationFilter<UpdateTaskRequest>>();
     }
 
     private static TaskResponse MapToResponse(DbTask task)

@@ -39,5 +39,5 @@ app.Run();
 
 namespace SimpleTaskBackend
 {
-    public partial class Program { }
+    public class Program { }
 }
