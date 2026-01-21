@@ -7,4 +7,6 @@ public class CreateTaskRequest
     [Required]
     [MinLength(1)]
     public string Title { get; set; } = string.Empty;
+    
+    public string? Description { get; set; }
 }

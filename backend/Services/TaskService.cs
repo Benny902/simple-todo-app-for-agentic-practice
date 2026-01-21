@@ -18,7 +18,7 @@ public class TaskService : ITaskService
     public async Task<List<DbTask>> GetAllAsync()
     {
         _logger.LogInformation("Getting all tasks");
-        return await _db.Tasks.ToListAsync();
+        return await _db.Tasks.Where(t => !t.IsDeleted).ToListAsync();
     }
 
     public async Task<DbTask> CreateAsync(DbTask task)
@@ -30,12 +30,13 @@ public class TaskService : ITaskService
         return task;
     }
 
-    public async Task<DbTask?> UpdateAsync(Guid id, string? title, bool? isCompleted)
+    public async Task<DbTask?> UpdateAsync(Guid id, string? title, string? description, bool? isCompleted)
     {
-        _logger.LogInformation("Updating task {Id}. New Title: {Title}, New IsCompleted: {IsCompleted}", id, title, isCompleted);
+        _logger.LogInformation("Updating task {Id}. New Title: {Title}, New Description: {Description}, New IsCompleted: {IsCompleted}", 
+            id, title, description, isCompleted);
         var task = await _db.Tasks.FindAsync(id);
 
-        if (task is null)
+        if (task is null || task.IsDeleted)
         {
             _logger.LogWarning("Task {Id} not found for update", id);
             return null;
@@ -50,9 +51,31 @@ public class TaskService : ITaskService
         {
             task.Title = title;
         }
+        
+        if (description is not null)
+        {
+            task.Description = description;
+        }
 
         await _db.SaveChangesAsync();
         _logger.LogInformation("Task {Id} updated successfully", id);
         return task;
+    }
+
+    public async Task<bool> DeleteAsync(Guid id)
+    {
+        _logger.LogInformation("Soft deleting task {Id}", id);
+        var task = await _db.Tasks.FindAsync(id);
+
+        if (task is null || task.IsDeleted)
+        {
+            _logger.LogWarning("Task {Id} not found for deletion", id);
+            return false;
+        }
+
+        task.IsDeleted = true;
+        await _db.SaveChangesAsync();
+        _logger.LogInformation("Task {Id} soft deleted successfully", id);
+        return true;
     }
 }

@@ -36,7 +36,8 @@ public static class TaskEndpoints
             {
                 var newTask = new DbTask
                 {
-                    Title = request.Title
+                    Title = request.Title,
+                    Description = request.Description
                 };
 
                 var createdTask = await service.CreateAsync(newTask);
@@ -57,7 +58,7 @@ public static class TaskEndpoints
         {
             try
             {
-                var updatedTask = await service.UpdateAsync(id, request.Title, request.IsCompleted);
+                var updatedTask = await service.UpdateAsync(id, request.Title, request.Description, request.IsCompleted);
 
                 if (updatedTask is null)
                 {
@@ -74,6 +75,27 @@ public static class TaskEndpoints
         })
         .WithName("UpdateTask")
         .AddEndpointFilter<ValidationFilter<UpdateTaskRequest>>();
+
+        group.MapDelete("/{id:guid}", async (Guid id, ITaskService service, ILogger<Program> logger) =>
+        {
+            try
+            {
+                var deleted = await service.DeleteAsync(id);
+
+                if (!deleted)
+                {
+                    return Results.NotFound();
+                }
+
+                return Results.NoContent();
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, "Error deleting task");
+                return Results.InternalServerError();
+            }
+        })
+        .WithName("DeleteTask");
     }
 
     private static TaskResponse MapToResponse(DbTask task)
@@ -82,6 +104,7 @@ public static class TaskEndpoints
         {
             Id = task.Id,
             Title = task.Title,
+            Description = task.Description,
             IsCompleted = task.IsCompleted,
             CreatedAt = task.CreatedAt
         };
