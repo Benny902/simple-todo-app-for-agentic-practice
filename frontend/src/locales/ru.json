@@ -1,3 +1,15 @@
 {
-  "app.title": "Менеджер задач"
+  "app.title": "Менеджер задач",
+  "app.subtitle": "Простое управление задачами на каждый день.",
+  "tasks.loading": "Загрузка задач...",
+  "tasks.empty": "Пока нет задач. Добавьте первую выше!",
+  "tasks.placeholder": "Что нужно сделать?",
+  "tasks.addButton": "Добавить задачу",
+  "tasks.priorityLabel": "Приоритет",
+  "tasks.priority.low": "Низкий",
+  "tasks.priority.medium": "Средний",
+  "tasks.priority.high": "Высокий",
+  "errors.loadFailed": "Не удалось загрузить задачи",
+  "errors.addFailed": "Не удалось добавить задачу",
+  "errors.updateFailed": "Не удалось обновить задачу"
 }

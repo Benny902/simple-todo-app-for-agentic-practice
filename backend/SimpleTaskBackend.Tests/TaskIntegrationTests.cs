@@ -50,7 +50,7 @@ public class TaskIntegrationTests : IClassFixture<WebApplicationFactory<Program>
     {
         // Arrange
         var client = _factory.CreateClient();
-        var newTask = new { title = "Integration Test Task" };
+        var newTask = new { title = "Integration Test Task", priority = "high" };
 
         // Act
         var response = await client.PostAsJsonAsync("/api/tasks", newTask);
@@ -60,8 +60,26 @@ public class TaskIntegrationTests : IClassFixture<WebApplicationFactory<Program>
         var createdTask = await response.Content.ReadFromJsonAsync<TaskResponse>();
         Assert.NotNull(createdTask);
         Assert.Equal(newTask.title, createdTask.Title);
+        Assert.Equal(newTask.priority, createdTask.Priority);
         Assert.False(createdTask.IsCompleted);
         Assert.NotEqual(Guid.Empty, createdTask.Id);
+    }
+
+    [Fact]
+    public async Task CreateTask_UsesMediumPriorityByDefault_WhenPriorityOmitted()
+    {
+        // Arrange
+        var client = _factory.CreateClient();
+        var newTask = new { title = "Default Priority Task" };
+
+        // Act
+        var response = await client.PostAsJsonAsync("/api/tasks", newTask);
+
+        // Assert
+        response.EnsureSuccessStatusCode();
+        var createdTask = await response.Content.ReadFromJsonAsync<TaskResponse>();
+        Assert.NotNull(createdTask);
+        Assert.Equal("medium", createdTask.Priority);
     }
 
     [Fact]
@@ -84,5 +102,56 @@ public class TaskIntegrationTests : IClassFixture<WebApplicationFactory<Program>
         Assert.NotNull(updatedTask);
         Assert.True(updatedTask.IsCompleted);
         Assert.Equal(createdTask.Id, updatedTask.Id);
+    }
+
+    [Fact]
+    public async Task PatchTask_UpdatesPriority()
+    {
+        // Arrange
+        var client = _factory.CreateClient();
+        var createResponse = await client.PostAsJsonAsync("/api/tasks", new { title = "Task to Reprioritize", priority = "low" });
+        createResponse.EnsureSuccessStatusCode();
+        var createdTask = await createResponse.Content.ReadFromJsonAsync<TaskResponse>();
+        Assert.NotNull(createdTask);
+
+        // Act
+        var patchResponse = await client.PatchAsJsonAsync($"/api/tasks/{createdTask.Id}", new { priority = "high" });
+
+        // Assert
+        patchResponse.EnsureSuccessStatusCode();
+        var updatedTask = await patchResponse.Content.ReadFromJsonAsync<TaskResponse>();
+        Assert.NotNull(updatedTask);
+        Assert.Equal("high", updatedTask.Priority);
+        Assert.Equal(createdTask.Id, updatedTask.Id);
+    }
+
+    [Fact]
+    public async Task GetTasks_SortsByCompletionThenPriority()
+    {
+        // Arrange
+        var client = _factory.CreateClient();
+        await client.PostAsJsonAsync("/api/tasks", new { title = "Low pending", priority = "low" });
+        await client.PostAsJsonAsync("/api/tasks", new { title = "High pending", priority = "high" });
+        await client.PostAsJsonAsync("/api/tasks", new { title = "Medium pending", priority = "medium" });
+
+        var completedCreate = await client.PostAsJsonAsync("/api/tasks", new { title = "High done", priority = "high" });
+        completedCreate.EnsureSuccessStatusCode();
+        var completedTask = await completedCreate.Content.ReadFromJsonAsync<TaskResponse>();
+        Assert.NotNull(completedTask);
+        await client.PatchAsJsonAsync($"/api/tasks/{completedTask.Id}", new { isCompleted = true });
+
+        // Act
+        var getResponse = await client.GetAsync("/api/tasks");
+
+        // Assert
+        getResponse.EnsureSuccessStatusCode();
+        var tasks = await getResponse.Content.ReadFromJsonAsync<List<TaskResponse>>();
+        Assert.NotNull(tasks);
+        Assert.Equal(4, tasks.Count);
+
+        Assert.Equal("High pending", tasks[0].Title);
+        Assert.Equal("Medium pending", tasks[1].Title);
+        Assert.Equal("Low pending", tasks[2].Title);
+        Assert.Equal("High done", tasks[3].Title);
     }
 }

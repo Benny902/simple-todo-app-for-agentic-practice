@@ -33,4 +33,21 @@ public class TaskValidationTests : IClassFixture<WebApplicationFactory<Program>>
         Assert.NotNull(problemDetails);
         Assert.Contains("Title", problemDetails.Errors.Keys);
     }
+
+    [Fact]
+    public async Task CreateTask_ReturnsBadRequest_WhenPriorityIsInvalid()
+    {
+        // Arrange
+        var client = _factory.CreateClient();
+        var invalidTask = new { title = "Task", priority = "urgent" };
+
+        // Act
+        var response = await client.PostAsJsonAsync("/api/tasks", invalidTask);
+
+        // Assert
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        var problemDetails = await response.Content.ReadFromJsonAsync<ValidationProblemDetails>();
+        Assert.NotNull(problemDetails);
+        Assert.Contains("Priority", problemDetails.Errors.Keys);
+    }
 }

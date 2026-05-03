@@ -36,7 +36,8 @@ public static class TaskEndpoints
             {
                 var newTask = new DbTask
                 {
-                    Title = request.Title
+                    Title = request.Title,
+                    Priority = request.Priority
                 };
 
                 var createdTask = await service.CreateAsync(newTask);
@@ -57,7 +58,7 @@ public static class TaskEndpoints
         {
             try
             {
-                var updatedTask = await service.UpdateAsync(id, request.Title, request.IsCompleted);
+                var updatedTask = await service.UpdateAsync(id, request.Title, request.IsCompleted, request.Priority);
 
                 if (updatedTask is null)
                 {
@@ -83,6 +84,7 @@ public static class TaskEndpoints
             Id = task.Id,
             Title = task.Title,
             IsCompleted = task.IsCompleted,
+            Priority = task.Priority,
             CreatedAt = task.CreatedAt
         };
     }

@@ -5,6 +5,10 @@
   "tasks.empty": "No tasks yet. Add one above!",
   "tasks.placeholder": "What needs to be done?",
   "tasks.addButton": "Add Task",
+  "tasks.priorityLabel": "Priority",
+  "tasks.priority.low": "Low",
+  "tasks.priority.medium": "Medium",
+  "tasks.priority.high": "High",
   "errors.loadFailed": "Failed to load tasks",
   "errors.addFailed": "Failed to add task",
   "errors.updateFailed": "Failed to update task"

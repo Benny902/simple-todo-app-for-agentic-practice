@@ -1,3 +1,15 @@
 {
-  "app.title": "Gestionnaire de Tâches"
+  "app.title": "Gestionnaire de Taches",
+  "app.subtitle": "Gestion simple des taches pour votre journee.",
+  "tasks.loading": "Chargement des taches...",
+  "tasks.empty": "Aucune tache pour le moment. Ajoutez-en une ci-dessus !",
+  "tasks.placeholder": "Que faut-il faire ?",
+  "tasks.addButton": "Ajouter une tache",
+  "tasks.priorityLabel": "Priorite",
+  "tasks.priority.low": "Basse",
+  "tasks.priority.medium": "Moyenne",
+  "tasks.priority.high": "Haute",
+  "errors.loadFailed": "Echec du chargement des taches",
+  "errors.addFailed": "Echec de l'ajout de la tache",
+  "errors.updateFailed": "Echec de la mise a jour de la tache"
 }

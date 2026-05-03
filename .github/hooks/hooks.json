@@ -1,0 +1,26 @@
+{
+  "version": 1,
+  "hooks": {
+    "postToolUse": [
+      {
+        "type": "command",
+        "powershell": ".github/hooks/scripts/format.ps1",
+        "timeoutSec": 60
+      }
+    ],
+    "preToolUse": [
+      {
+        "type": "command",
+        "powershell": ".github/hooks/scripts/guard-tool.ps1",
+        "timeoutSec": 10
+      }
+    ],
+    "subagentStop": [
+      {
+        "type": "command",
+        "powershell": ".github/hooks/scripts/notify.ps1",
+        "timeoutSec": 10
+      }
+    ]
+  }
+}
