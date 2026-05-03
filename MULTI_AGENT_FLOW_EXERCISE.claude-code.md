@@ -1,8 +1,8 @@
-# Exercise: Multi-Agent Feature Flow
+# Exercise: Multi-Agent Feature Flow — **Claude Code edition**
 
 You'll add a `priority` field (`low | medium | high`) to tasks — persisted in the backend, shown as a colored badge in the UI, used as a secondary sort key. You'll drive it through a coordinated workflow of built-in + custom sub-agents, with lifecycle hooks enforcing the boring stuff, and per-phase commits so the git log tells the story.
 
-Works in **Claude Code** and **GitHub Copilot** (CLI, VS Code, cloud agent). Where they diverge, the step is split. **Scripts below are written for Windows / PowerShell.**
+**Scripts below are written for Windows / PowerShell.**
 
 ---
 
@@ -20,9 +20,6 @@ Different models on purpose — feel the cost/quality trade-off.
 ### 1.1 Pick the folder
 
 - **Claude Code:** `.claude/agents/<name>.md`
-- **Copilot:** `.github/agents/<name>.agent.md`
-
-Same Markdown body in both; only the location differs.
 
 ### 1.2 Add `frontend-dev`
 
@@ -62,9 +59,7 @@ You implement the backend half of the feature in PLAN.md.
 
 ### 1.4 Add `manual-tester`
 
-First install the chrome-devtools MCP:
-- **Claude Code:** `claude mcp add chrome-devtools -- npx -y chrome-devtools-mcp@latest`
-- **Copilot:** add it to `.vscode/mcp.json` (see your Copilot MCP docs).
+Verify that the chrome-devtools MCP already installed and enabled.
 
 ```markdown
 ---
@@ -96,59 +91,16 @@ model: opus
 ---
 
 Read the diff (`git diff main...HEAD`) and:
-- Run `dotnet build` and `npm run lint`.
+- Run `dotnet build` (from `backend/`) and `npm run lint` (from `frontend/`).
 - Group findings: P0 (must fix), P1 (should fix), P2 (nit).
 - One summary message. No edits.
 ```
 
 ### 1.6 Restart your session and verify the agents loaded
 
-Agent files are read at session start. Restart before continuing.
-
-**Claude Code:**
-
-```text
-/exit
-claude
-/agents
-```
-
-Under **Project agents** you should see all four with their model labels:
-
-```text
-Project agents (.claude\agents)
-backend-dev    · sonnet
-code-reviewer  · opus
-frontend-dev   · sonnet
-manual-tester  · haiku
-```
-
-**Copilot — VS Code:**
-
-1. Command Palette (`Ctrl+Shift+P`) → **Developer: Reload Window**.
-2. Open the Chat panel and click the **chat mode picker** (dropdown above the chat input). Your four modes from `.github\chatmodes\` should be listed.
-
-**Copilot — CLI:**
-
-```text
-/exit          # or Ctrl+D
-copilot
-```
-
-Then type `@` in the prompt — the agents from `.github\chatmodes\` should appear in the picker.
-
-> If an agent is missing: check the file is in the right folder, the YAML frontmatter parses cleanly (no tabs, quotes around any descriptions with colons), and the filename ends in `.md` (Claude) or `.chatmode.md` (Copilot).
-
 ---
 
 ## Part 2 — Add lifecycle hooks
-
-Hooks **enforce** what prompts only suggest. Both Claude Code and Copilot have real lifecycle hooks today. Scripts below are **PowerShell**; PowerShell 5.1 ships with Windows so no install needed.
-
-> **Why each script appends to a log file:** parent and sub-agent contexts are isolated. When a sub-agent triggers a hook, the parent never sees it — only the sub-agent does, briefly, before its context is discarded. The shared `hooks.log` is your only ground truth for what actually fired across all contexts.
-
-> If your `Get-ExecutionPolicy` returns `Restricted`, run once in an elevated PowerShell:
-> `Set-ExecutionPolicy -Scope CurrentUser RemoteSigned`
 
 ### 2.1 Claude Code — `.claude\settings.json`
 
@@ -156,7 +108,7 @@ Hooks **enforce** what prompts only suggest. Both Claude Code and Copilot have r
 {
   "hooks": {
     "PostToolUse": [
-      { "matcher": "Edit|Write", "hooks": [{ "type": "command", "command": "powershell -NoProfile -ExecutionPolicy Bypass -File .claude/scripts/format.ps1" }] }
+      { "matcher": "Edit|Write|MultiEdit|NotebookEdit", "hooks": [{ "type": "command", "command": "powershell -NoProfile -ExecutionPolicy Bypass -File .claude/scripts/format.ps1" }] }
     ],
     "PreToolUse": [
       { "matcher": "Bash", "hooks": [{ "type": "command", "command": "powershell -NoProfile -ExecutionPolicy Bypass -File .claude/scripts/guard-bash.ps1" }] }
@@ -236,111 +188,7 @@ try {
 exit 0
 ```
 
-### 2.3 Copilot — `.github\hooks\hooks.json`
-
-One file works for **Copilot CLI, VS Code Copilot, and the cloud agent**. Auto-loaded from `.github/hooks/*.json` in the repo (CLI: working directory; cloud agent: default branch). Available events (lowerCamelCase): `sessionStart`, `sessionEnd`, `userPromptSubmitted`, `preToolUse`, `postToolUse`, `errorOccurred`. (No `stop` / `subagentStop` equivalent.)
-
-```json
-{
-  "version": 1,
-  "hooks": {
-    "postToolUse": [
-      {
-        "type": "command",
-        "powershell": ".github/hooks/scripts/format.ps1",
-        "timeoutSec": 30
-      }
-    ],
-    "preToolUse": [
-      {
-        "type": "command",
-        "powershell": ".github/hooks/scripts/guard-tool.ps1",
-        "timeoutSec": 10
-      }
-    ]
-  }
-}
-```
-
-### 2.4 Copilot — write two PowerShell scripts
-
-Stdin sends JSON with top-level `toolName` and `toolInput` (camelCase — different from Claude Code's `tool_input.*`). Both scripts append to `.github\hooks\hooks.log`. Create `.github\hooks\scripts\` and save each file.
-
-**`.github\hooks\scripts\format.ps1`** — formats the whole repo after every edit (coarse but bulletproof; the per-file `toolInput` shape varies by tool):
-
-```powershell
-$ts = (Get-Date).ToString("HH:mm:ss")
-npx --yes prettier --write "frontend/**/*.{ts,tsx,js,json,md}" *> $null
-Push-Location backend
-dotnet format *> $null
-Pop-Location
-Add-Content -Path ".github\hooks\hooks.log" -Value "$ts [format]  repo formatted"
-Write-Output "formatted repo"
-exit 0
-```
-
-**`.github\hooks\scripts\guard-tool.ps1`** — blocks dangerous tool calls:
-
-```powershell
-$raw = [Console]::In.ReadToEnd()
-$ts = (Get-Date).ToString("HH:mm:ss")
-try {
-    $payload = $raw | ConvertFrom-Json
-    $combined = "$($payload.toolName) $($payload.toolInput | ConvertTo-Json -Compress)"
-} catch {
-    $combined = $raw
-}
-
-if ($combined -match 'rm\s+-rf|sudo\s|git\s+push\s+(--force|-f)|DROP\s+TABLE|Remove-Item.*-Recurse.*-Force') {
-    Add-Content -Path ".github\hooks\hooks.log" -Value "$ts [guard]   BLOCKED: $combined"
-    [Console]::Error.WriteLine("Blocked dangerous operation: $combined")
-    exit 1
-}
-exit 0
-```
-
-### 2.5 Restart your session and verify the hooks loaded
-
-Hook configs are read at session start. Restart before continuing.
-
-**Claude Code:**
-
-```text
-/exit
-claude
-/hooks
-```
-
-You should see three event entries, each with `(1)` next to it (one hook configured per event):
-
-```text
-PostToolUse  (1)
-  Edit|Write
-    powershell -NoProfile -ExecutionPolicy Bypass -File .claude/scripts/format.ps1
-PreToolUse   (1)
-  Bash
-    powershell -NoProfile -ExecutionPolicy Bypass -File .claude/scripts/guard-bash.ps1
-SubagentStop (1)
-  *
-    powershell -NoProfile -ExecutionPolicy Bypass -File .claude/scripts/notify.ps1
-```
-
-**Copilot — VS Code:**
-
-1. Command Palette (`Ctrl+Shift+P`) → **Developer: Reload Window**.
-2. Open the **Output** panel → choose **GitHub Copilot Chat Hooks** from the channel dropdown. On startup you should see a line for each loaded hook (`postToolUse`, `preToolUse`).
-3. Sanity test: ask Copilot to edit any file, then look for the format hook line in the same channel.
-
-**Copilot — CLI:**
-
-```text
-/exit          # or Ctrl+D
-copilot --verbose
-```
-
-The startup banner should list the loaded hook file (`.github/hooks/hooks.json`). Trigger any tool call and confirm the formatter runs.
-
-> If hooks don't appear: check the JSON parses (`Get-Content .github\hooks\hooks.json | ConvertFrom-Json`), the script paths are relative to the repo root, and (Copilot only) your org admin hasn't disabled hooks.
+### 2.3 Restart your session and verify the hooks loaded
 
 ---
 
@@ -353,7 +201,6 @@ The startup banner should list the loaded hook file (`.github/hooks/hooks.json`)
 > Before you start, clear the hooks log so this run is isolated:
 > ```
 > Remove-Item .claude\hooks.log -ErrorAction SilentlyContinue
-> Remove-Item .github\hooks\hooks.log -ErrorAction SilentlyContinue
 > ```
 >
 > Run this exact flow, **one phase at a time**. Commit at each phase boundary so the git log tells the story.
@@ -387,34 +234,6 @@ The startup banner should list the loaded hook file (`.github/hooks/hooks.json`)
 >
 > 6. **Report what fired** — at the end, print the full hooks log so we can see what actually ran across every context (parent + sub-agents):
 >    ```
->    Get-Content .claude\hooks.log         # Claude Code
->    Get-Content .github\hooks\hooks.log   # Copilot
+>    Get-Content .claude\hooks.log
 >    ```
 >    Summarize: how many `[format]` lines? How many `[notify]` (sub-agent finishes)? Any `[guard] BLOCKED`?
-
-### 3.2 What to watch for
-
-- **Parallelism (steps 3 & 4):** look for two sub-agent invocations in the **same** assistant message. If they run sequentially, push back: _"make both calls in a single message."_
-- **Hooks firing:** each dev edit appends a `[format]` line to `hooks.log`. Each sub-agent finish appends `[notify]`. The parent agent's chat only shows hook fires for the parent's own edits — sub-agent fires are invisible there. The log is the truth.
-- **`PLAN.md` is the contract:** the two devs never share context — only the file. If they disagree on the API shape, the plan was too vague.
-- **Reviewer is read-only.** If it tries to edit, your `tools:` list isn't being honored.
-
----
-
-## Reflect
-
-- Did **Explore → Plan → Implement → Verify** save time, or feel like overhead?
-- Did parallel sub-agents finish faster, or did stitching results back together burn the savings?
-- Did `PLAN.md` hold as a contract, or did the devs disagree?
-- If you had to keep **one** custom sub-agent for daily work — which?
-- **Read the git log:**
-  ```
-  git log --oneline
-  git show <hash> --stat       # for each commit
-  ```
-  Does the log read like the actual story of who built what? Did either dev stray into the other's lane (e.g. the backend commit touching `frontend/`)? If you came back to this branch in a week, would the log alone tell you what happened?
-- **Read the hooks log** (`.claude\hooks.log` or `.github\hooks\hooks.log`):
-  - How many `[format]` fires total? Compare with the number of files in `git diff main --stat` — do they roughly match (one fire per edit)?
-  - How many `[notify]` fires? It should equal the number of sub-agent invocations (Explore + Plan + 2 devs + 2 verifiers + iteration re-runs).
-  - Any `[guard] BLOCKED` entries? You're hoping for zero — that's the guard doing nothing, which is good.
-  - The parent session only sees hook fires for the parent's own edits. The log is the only place sub-agent fires show up. Did the count surprise you?
