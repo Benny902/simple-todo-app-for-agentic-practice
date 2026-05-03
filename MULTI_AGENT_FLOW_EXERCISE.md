@@ -20,7 +20,7 @@ Different models on purpose — feel the cost/quality trade-off.
 ### 1.1 Pick the folder
 
 - **Claude Code:** `.claude/agents/<name>.md`
-- **Copilot:** `.github/chatmodes/<name>.chatmode.md`
+- **Copilot:** `.github/agents/<name>.agent.md`
 
 Same Markdown body in both; only the location differs.
 
