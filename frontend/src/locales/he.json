@@ -1,3 +1,15 @@
 {
-  "app.title": "מנהל משימות"
+  "app.title": "מנהל משימות",
+  "app.subtitle": "ניהול משימות פשוט ליום שלך.",
+  "tasks.loading": "טוען משימות...",
+  "tasks.empty": "אין משימות עדיין. הוסף אחת למעלה!",
+  "tasks.placeholder": "מה צריך לעשות?",
+  "tasks.addButton": "הוסף משימה",
+  "tasks.priorityLabel": "עדיפות",
+  "tasks.priority.low": "נמוכה",
+  "tasks.priority.medium": "בינונית",
+  "tasks.priority.high": "גבוהה",
+  "errors.loadFailed": "טעינת המשימות נכשלה",
+  "errors.addFailed": "הוספת המשימה נכשלה",
+  "errors.updateFailed": "עדכון המשימה נכשל"
 }

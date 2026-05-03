@@ -1,5 +1,5 @@
 import { config } from '../config';
-import type { Task } from '../types';
+import type { Task, TaskPriority } from '../types';
 
 export const api = {
     baseUrl: config.API_URL,
@@ -12,13 +12,13 @@ export const api = {
         return response.json();
     },
 
-    createTask: async (title: string): Promise<Task> => {
+    createTask: async (title: string, priority: TaskPriority): Promise<Task> => {
         const response = await fetch(`${config.API_URL}/api/tasks`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ title }),
+            body: JSON.stringify({ title, priority }),
         });
         if (!response.ok) {
             throw new Error('Failed to create task');

@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import type { Task } from '../types';
 
 interface TaskItemProps {
@@ -7,6 +8,8 @@ interface TaskItemProps {
 }
 
 export const TaskItem: React.FC<TaskItemProps> = ({ task, onToggle }) => {
+    const { t } = useTranslation();
+
     return (
         <li className={`task-item ${task.isCompleted ? 'completed' : ''}`}>
             <input 
@@ -16,6 +19,9 @@ export const TaskItem: React.FC<TaskItemProps> = ({ task, onToggle }) => {
                 className="task-checkbox"
             />
             <span className="task-title">{task.title}</span>
+            <span className={`priority-badge priority-${task.priority}`}>
+                {t(`tasks.priority.${task.priority}`)}
+            </span>
         </li>
     );
 };
